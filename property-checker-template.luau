@@ -8,7 +8,7 @@ local Properties: _C.CheckerFormat = {
     {
         Instance = Changer(),
         Condition = function(_E)
-            return _E.Value("Distance", _E.Instance():Property("Position")) < 10
+            return _E.Value("Distance", _E.Instance():Property("Position")) < 10 -- boolean value
         end,
     },
 }
