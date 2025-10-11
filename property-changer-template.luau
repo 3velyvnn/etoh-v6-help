@@ -12,7 +12,6 @@ local Properties: _C.Format = {
 					return _E.Toucher():Property("Color")
 			end,
 			-- etc..
-			
 		},
 }
 	
