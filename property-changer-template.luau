@@ -7,10 +7,12 @@ local Toucher, Tagged, TagFromSequenceVariable, Changer, Character = _C.Toucher,
 local Properties: _C.Format = {
 	{
 			Instance = Toucher(),
-			Tween = TweenInfo.new(0, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),
+			Tween = TweenInfo.new(0, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), -- optional
 			Color = function(_E)
 					return _E.Toucher():Property("Color")
-			end
+			end,
+			-- etc..
+			
 		},
 }
 	
