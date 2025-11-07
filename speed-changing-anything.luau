@@ -43,7 +43,7 @@ local Properties: _C.Format = {
 			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("ChangeDelay")
 		),
 		AssemblyLinearVelocity = function(_E)
-				return E.Tagged("TargetConveyor").CFrame.LookVector * E.Tagged("TargetConveyor"):FindChild("ModifyConfiguration"):Property("TargetSpeed")
+				return _E.Tagged("TargetConveyor").CFrame.LookVector * _E.Tagged("TargetConveyor"):FindChild("ModifyConfiguration"):Property("TargetSpeed")
 		end
 	},
 	{
