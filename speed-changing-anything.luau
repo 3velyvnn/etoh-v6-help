@@ -10,38 +10,42 @@ if the client object is a spinner:
 1. add a `Configuration` object to the model
 2. also add a tag called `TargetSpinner`
 3. rename it to ModifyConfiguration
-4. add the following Attributes
+4. add the following Attribute
 	- TargetSpeed: number
-	- Duration: number
-	- Reverses: boolean
-	- ChangeDelay: number
-
 if the client object is a conveyor:
 1. add a tag called `TargetConveyor` TO THE PART BTW
 2. repeat the following steps from before: 1, 3, 4
 ]]--
 
+local otherConfig: {[string]: any} = {
+	Duration = 3,
+	Reverses = true,
+	Delay = 0
+}
 local Properties: _C.Format = {
 	-- # SPINNERS
 	{
+		
 		Instance = Tagged("TargetSpinner"),
 		Tween = TweenInfo.new(
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("Duration"), 
+			otherConfig.Duration, 
 			Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, 
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("Reverses"),
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("ChangeDelay")
+			otherConfig.Reverses,
+			otherConfig.Delay
 		), 
-		AngularVelocity = Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("TargetSpeed")
+		AngularVelocity = function(_E) 
+			return _E.Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("TargetSpeed") 
+		end
 	},
 	-- # CONVEYORS
 	{
 		Instance = Tagged("TargetConveyor"),
 		Tween = TweenInfo.new(
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("Duration"), 
+			otherConfig.Duration, 
 			Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, 
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("Reverses"),
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("ChangeDelay")
-		),
+			otherConfig.Reverses,
+			otherConfig.Delay
+		), 
 		AssemblyLinearVelocity = function(_E)
 				return _E.Tagged("TargetConveyor").CFrame.LookVector * _E.Tagged("TargetConveyor"):FindChild("ModifyConfiguration"):Property("TargetSpeed")
 		end
@@ -49,12 +53,14 @@ local Properties: _C.Format = {
 	{
 		Instance = Tagged("TargetConveyor"):FindChild("Beam"),
 		Tween = TweenInfo.new(
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("Duration"), 
+			otherConfig.Duration, 
 			Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, 
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("Reverses"),
-			Tagged("TargetSpinner"):FindChild("ModifyConfiguration"):Property("ChangeDelay")
-		),
-		TextureSpeed = Tagged("TargetConveyor"):FindChild("ModifyConfiguration"):Property("TargetSpeed") / _E.Tagged("TargetConveyor"):FindChildOfClass("Beam"):Property("TextureLength")
+			otherConfig.Reverses,
+			otherConfig.Delay
+		), 
+		TextureSpeed = function(_E)
+			return _E.Tagged("TargetConveyor"):FindChild("ModifyConfiguration"):Property("TargetSpeed") / _E.Tagged("TargetConveyor"):FindChildOfClass("Beam"):Property("TextureLength")
+		end
 	},
 }
 	
