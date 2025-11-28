@@ -9,7 +9,7 @@ local Properties: _C.Format = {
 		Instance = Toucher(),
 		Tween = TweenInfo.new(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.Out), -- optional
 		Color = function(_E)
-				return _E.Toucher():Property("Color")
+			return _E.Toucher():Property("Color")
 		end,
 		-- etc..
 	},
