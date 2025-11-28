@@ -4,7 +4,7 @@ local script, workspace, Workspace, game, Game, shared, _G, wait, task, spawn, d
 local Toucher, Tagged, TagFromSequenceVariable, Changer, Character = _C.Toucher, _C.Tagged, _C.TagFromSequenceVariable, _C.Changer, _C.Character
 -- DON'T TOUCH THE LINES ABOVE -- -- PLEASE IGNORE THE LINES ABOVE -- -- DON'T TOUCH THE LINES ABOVE -- -- PLEASE IGNORE THE LINES ABOVE --
 
--- run this code in the command bar
+-- run this code in the command bar, YOU MUST SELECT THE PROPERTYCHANGERCONFIGURATION BTW 
 --[[
 game.Selection:Get()[1]:SetAttribute("Speed", 30)
 ]]--
