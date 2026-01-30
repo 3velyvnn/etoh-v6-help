@@ -46,17 +46,6 @@ local CAMERA_DEFAULTS = {
 
 local currentCamera = workspace.CurrentCamera
 
-local function HandleCache(rootScope: _T.Scope, utility: _T.Utility)
-	local playerScripts = LocalPlayer:WaitForChild("PlayerScripts")
-	local playerModule = require(playerScripts:WaitForChild("PlayerModule"))
-	local cache = {
-		Player = LocalPlayer,
-		PlayerModule = playerModule,
-		MovementController = playerModule:GetControls()
-	}
-	return cache
-end
-
 function PlayerMod.Init(utility: _T.Utility)
 	local Config = utility.Config
 	CONFIG_TEMPLATE = _TDefs.BaseConfig
@@ -73,8 +62,21 @@ function PlayerMod.Run(scope: _T.Scope, utility: _T.Utility)
 	if not pad or not pad:IsA("BasePart") then
 		return
 	end
+
+	--> Player Module
+	local playerScripts = LocalPlayer:WaitForChild("PlayerScripts")
+	local playerModule = require(playerScripts:WaitForChild("PlayerModule"))
+	local MovementController = playerModule:GetControls()
+
+	--> Restore to defaults on unload.
+	scope:add(function()
+		MovementController.moveFunction = LocalPlayer.Move
+	end)
 	
-	--> Configurations
+	--> Utility
+	local Character = utility.Character
+
+	----> Configurations
 	local Config = utility.Config
 	local _C = {
 		BaseConfiguration = {
@@ -116,19 +118,7 @@ function PlayerMod.Run(scope: _T.Scope, utility: _T.Utility)
 		},
 		CooldownActive = false,
 	}
-	
-	--> Player Module
-	local playerScripts = LocalPlayer:WaitForChild("PlayerScripts")
-	local playerModule = require(playerScripts:WaitForChild("PlayerModule"))
-	local MovementController = playerModule:GetControls()
-	
-	scope:add(function()
-		MovementController.moveFunction = LocalPlayer.Move
-	end)
-	
-	--> Utility
-	local Character = utility.Character
-	
+
 	--> congigfires (thank you ramification for this section name)
 	local movementConfig = _C.MovementConfiguration
 	local cameraConfig = _C.CameraConfiguration
@@ -143,7 +133,7 @@ function PlayerMod.Run(scope: _T.Scope, utility: _T.Utility)
 	_C.__index.Movement = function(): ()
 		local lockAxis = movementConfig.LockAxis
 		local directionalConfig = movementConfig.DirectionalConfig
-		if not MovementController then return end
+		local MovementController = playerModule:GetControls()
 		MovementController.moveFunction = function(player: Player, walkDirection: Vector3, relativeToCamera: boolean)
 			if lockAxis.Enabled then
 				-- the only valid axis should only be Vector3.zAxis and Vector3.xAxis
@@ -185,15 +175,14 @@ function PlayerMod.Run(scope: _T.Scope, utility: _T.Utility)
 		end
 	end
 	
+
 	_C.__index.__call = function()
 		print("call")
 		if baseConfig.__index.Revert then
 			currentCamera.FieldOfView = CAMERA_DEFAULTS.FieldOfView
 			currentCamera.CameraType = CAMERA_DEFAULTS.CameraType
-			if MovementController then
-				MovementController.moveFunction = function(player: Player, walkDirection: Vector3, relativeToCamera: boolean)
-					LocalPlayer.Move(player, walkDirection, relativeToCamera)
-				end
+			MovementController.moveFunction = function(player: Player, walkDirection: Vector3, relativeToCamera: boolean)
+				LocalPlayer.Move(player, walkDirection, relativeToCamera)
 			end
 		else
 			if movementConfig.__index.Enabled then
